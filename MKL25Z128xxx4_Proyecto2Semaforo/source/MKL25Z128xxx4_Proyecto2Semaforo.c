@@ -759,14 +759,14 @@ int main(void) {
     	/*P A R A        N S e n s o r  ==  1  & &   S S e n s o r ==  1 */
 
     	case 29:											//Estado Azul (NS-SN), Rojo (NS-SN-EO-OE), t=4s
-    		actual_state=estado;
+    		estadoactual=estado;
     		if(Timer_init==0){
 				Timer_init=1;
 				TPM_SetTimerPeriod(TPM0, FSM[29].TIMER_MOD);
 				TPM_StartTimer(TPM0, kTPM_SystemClock);
 			}
 
-			if(TIMER_FLAG){
+			if(timerBandera){
 				TPM_ClearStatusFlags(TPM0, 1u<<8u);
 				Timer_init= 0;
 				TPM_StopTimer(TPM0);
@@ -868,20 +868,15 @@ int main(void) {
 				GPIO_TogglePinsOutput(GPIOA, 1u<<12u);
 				while(!(TPM2->STATUS & mascara2)){ 		//Wait
 				}
-
 				if(TPM2->STATUS & mascara2){
 					TPM2->STATUS &=mascara_Off2;
 					contador=contador+1;
 					TPM_StopTimer(TPM2);
 					TPM2->CNT=0;
 				}
-
 			}while(contador<=9);
     		estado=estadoactual;
-
     	break;
-
     	}
     }
-
 }
