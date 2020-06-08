@@ -721,7 +721,7 @@ int main(void) {
 				TPM_SetTimerPeriod(TPM1, 64u);
 				TPM_StartTimer(TPM1, kTPM_SystemClock);
 				GPIO_TogglePinsOutput(GPIOA, 1u<<4u);
-				GPIO_TogglePinsOutput(GPIOC, 1u<<8u);
+				GPIO_TogglePinsOutput(GPIOA, 1u<<2u);
 				while(!(TPM1->STATUS & mascara)){			//Wait
 				}
 
