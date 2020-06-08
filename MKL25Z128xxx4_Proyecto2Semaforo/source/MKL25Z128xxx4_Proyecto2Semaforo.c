@@ -18,7 +18,6 @@
 #define SurRojo 22u
 #define SurVuelta 23u
 #define SurBoton 29u
-//GPIOC
 #define EsteVerde 5u
 #define EsteAmarillo 4u
 #define EsteRojo 3u
@@ -27,8 +26,8 @@
 #define OesteVerde 4u
 #define OesteAmarillo 12u
 #define OesteRojo 4u
-#define OesteVuelta 8u
-#define OesteBoton 9u
+#define OesteVuelta 2u
+#define OesteBoton 1u
 
 typedef struct {
 	uint16_t TIMER_MOD;
@@ -133,12 +132,12 @@ int main(void) {
 		GPIO_WritePinOutput(GPIOA, OesteVerde, FSM[estado].OV);
 		GPIO_WritePinOutput(GPIOA, OesteAmarillo, FSM[estado].OA);
 		GPIO_WritePinOutput(GPIOD, OesteRojo, FSM[estado].OR);
-		GPIO_WritePinOutput(GPIOC, OesteVuelta, FSM[estado].OVuelta);
+		GPIO_WritePinOutput(GPIOA, OesteVuelta, FSM[estado].OVuelta);
 
     	NSensor=GPIO_ReadPinInput(GPIOC, NorteBoton);
     	SSensor=GPIO_ReadPinInput(GPIOE, SurBoton);
     	ESensor=GPIO_ReadPinInput(GPIOC, EsteBoton);
-    	OSensor=GPIO_ReadPinInput(GPIOC, OesteBoton);
+    	OSensor=GPIO_ReadPinInput(GPIOA, OesteBoton);
 
     	if(NSensor == 0){
 			NSensor_reg=0;
@@ -663,8 +662,6 @@ int main(void) {
     	break;
 
 
-    	/*P A R A        E S e n s o r  ==  0  & &   W S e n s o r ==  1 */
-
     	case 24:												//Estado Verde Parpadeo EO / Verde OE / Rojo (NS-SN), t=1s
     		estadoactual=estado;
     		do{
@@ -823,7 +820,7 @@ int main(void) {
 				TPM_SetTimerPeriod(TPM1, 64u);
 				TPM_StartTimer(TPM1, kTPM_SystemClock);
 				GPIO_TogglePinsOutput(GPIOC, 1u<<0u);
-				GPIO_TogglePinsOutput(GPIOC, 1u<<8u);
+				GPIO_TogglePinsOutput(GPIOA, 1u<<2u);
 				while(!(TPM1->STATUS & mascara)){			//Wait
 				}
 
@@ -854,7 +851,7 @@ int main(void) {
 			GPIO_WritePinOutput(GPIOA, OesteVerde, FSM[estado].OV);
 			GPIO_WritePinOutput(GPIOA, OesteAmarillo, FSM[estado].OA);
 			GPIO_WritePinOutput(GPIOD, OesteRojo, FSM[estado].OR);
-			GPIO_WritePinOutput(GPIOC, OesteVuelta, FSM[estado].OVuelta);
+			GPIO_WritePinOutput(GPIOA, OesteVuelta, FSM[estado].OVuelta);
 
     		do{
 
