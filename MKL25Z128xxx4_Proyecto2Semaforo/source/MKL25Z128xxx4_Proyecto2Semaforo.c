@@ -835,43 +835,6 @@ int main(void) {
 			estado_reg=0;
 			estado=8;
 		break;
-    	case 33:
-    		GPIO_WritePinOutput(GPIOB, NorteVerde, FSM[estado].NV);
-			GPIO_WritePinOutput(GPIOB, NorteAmarillo, FSM[estado].NA);
-			GPIO_WritePinOutput(GPIOB, NorteRojo, FSM[estado].NR);
-			GPIO_WritePinOutput(GPIOB, NorteVuelta, FSM[estado].NVuelta);
-			GPIO_WritePinOutput(GPIOE, SurVerde, FSM[estado].SV);
-			GPIO_WritePinOutput(GPIOE, SurAmarillo, FSM[estado].SA);
-			GPIO_WritePinOutput(GPIOE, SurRojo, FSM[estado].SR);
-			GPIO_WritePinOutput(GPIOE, SurVuelta, FSM[estado].SA);
-			GPIO_WritePinOutput(GPIOC, EsteVerde, FSM[estado].EV);
-			GPIO_WritePinOutput(GPIOC, EsteAmarillo, FSM[estado].EA);
-			GPIO_WritePinOutput(GPIOC, EsteRojo, FSM[estado].ER);
-			GPIO_WritePinOutput(GPIOC, EsteVuelta, FSM[estado].EVuelta);
-			GPIO_WritePinOutput(GPIOA, OesteVerde, FSM[estado].OV);
-			GPIO_WritePinOutput(GPIOA, OesteAmarillo, FSM[estado].OA);
-			GPIO_WritePinOutput(GPIOD, OesteRojo, FSM[estado].OR);
-			GPIO_WritePinOutput(GPIOA, OesteVuelta, FSM[estado].OVuelta);
-
-    		do{
-
-    			TPM_SetTimerPeriod(TPM2, 16u);
-				TPM_StartTimer(TPM2, kTPM_SystemClock);
-				GPIO_TogglePinsOutput(GPIOB, 1u<<1u);
-				GPIO_TogglePinsOutput(GPIOE, 1u<<21u);
-				GPIO_TogglePinsOutput(GPIOC, 1u<<4u);
-				GPIO_TogglePinsOutput(GPIOA, 1u<<12u);
-				while(!(TPM2->STATUS & mascara2)){ 		//Wait
-				}
-				if(TPM2->STATUS & mascara2){
-					TPM2->STATUS &=mascara_Off2;
-					contador=contador+1;
-					TPM_StopTimer(TPM2);
-					TPM2->CNT=0;
-				}
-			}while(contador<=9);
-    		estado=estadoactual;
-    	break;
     	}
     }
 }
