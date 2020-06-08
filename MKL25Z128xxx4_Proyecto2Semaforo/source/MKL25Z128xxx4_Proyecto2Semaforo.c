@@ -65,12 +65,12 @@ int main(void) {
 	TPM_Init(TPM2, &config);
 	state FSM[34];
 	FSM[0]=(state){.NV= 0u, .NA=1u, .NR=0u, .NVuelta=0u, .SV = 0u, .SA = 1u, .SR = 0u, .SVuelta=0u, .EV = 0u, .EA = 1u, .ER = 0u, .EVuelta=0u, .OV = 0u, .OA = 1u, .OR = 0u, .OVuelta=0u, .TIMER_MOD=2560u};		//Estado de Parpadeo Amarillo (IDLE)
-	FSM[1]=(state ){.NV= 1u, .NA=0u, .NR=0u, .NVuelta=0u, .SV = 1u, .SA = 0u, .SR = 0u, .SVuelta=0u, .EV = 0u, .EA = 0u, .ER = 1u, .EVuelta=0u, .OV = 0u, .OA = 0u, .OR = 1u, .OVuelta=0u, .TIMER_MOD=2024u};		//Estado Verde (NS-SN)/ Rojo (EO-OE) Sensado, t=7s
-	FSM[2]=(state ){.NV= 1u, .NA=0u, .NR=0u, .NVuelta=0u, .SV= 1u, .SA = 0u, .SR = 0u, .SVuelta=0u, .EV = 0u, .EA= 0u, .ER = 1u, .EVuelta=0u, .OV = 0u, .OA = 0u, .OR = 1u, .OVuelta=0u, .TIMER_MOD=2024u}; 		//Estado Verde Sin Vuelta (NS-SN) / Rojo (EO-OE), t=7s
+	FSM[1]=(state ){.NV= 1u, .NA=0u, .NR=0u, .NVuelta=0u, .SV = 1u, .SA = 0u, .SR = 0u, .SVuelta=0u, .EV = 0u, .EA = 0u, .ER = 1u, .EVuelta=0u, .OV = 0u, .OA = 0u, .OR = 1u, .OVuelta=0u, .TIMER_MOD=1792u};		//Estado Verde (NS-SN)/ Rojo (EO-OE) Sensado, t=7s
+	FSM[2]=(state ){.NV= 1u, .NA=0u, .NR=0u, .NVuelta=0u, .SV= 1u, .SA = 0u, .SR = 0u, .SVuelta=0u, .EV = 0u, .EA= 0u, .ER = 1u, .EVuelta=0u, .OV = 0u, .OA = 0u, .OR = 1u, .OVuelta=0u, .TIMER_MOD=1792u}; 		//Estado Verde Sin Vuelta (NS-SN) / Rojo (EO-OE), t=7s
 	FSM[3]=(state ){.NV= 0u, .NA=0u, .NR=0u, .NVuelta=0u, .SV= 0u, .SA = 0u, .SR = 0u, .SVuelta=0u, .EV = 0u, .EA = 0u, .ER = 1u, .EVuelta=0u, .OV = 0u, .OA = 0u, .OR = 1u, .OVuelta=0u}; 						//Estado Parpadeo Verde (NS-SN) / Rojo (EO-OE), t=1s
 	FSM[4]=(state ){.NV= 0u, .NA=1u, .NR=0u, .NVuelta=0u, .SV = 0u, .SA = 1u, .SR = 0u, .SVuelta=0u, .EV = 0u, .EA = 0u, .ER = 1u, .EVuelta=0u, .OV = 0u, .OA= 0u, .OR = 1u, .OVuelta=0u, .TIMER_MOD=512u}; 		//Estado Amarillo (NS-SN) / Rojo (EO-OE), t=2s
-	FSM[5]=(state ){.NV= 0u, .NA=0u, .NR=1u, .NVuelta=0u, .SV= 0u, .SA= 0u, .SR = 1u, .SVuelta=0u, .EV = 1u, .EA = 0u, .ER = 0u, .EVuelta=0u, .OV = 1u, .OA = 0u, .OR = 0u, .OVuelta=0u, .TIMER_MOD=2024u};		// Estado Rojo (NS-SN)/ Verde (EO-OE) Sensado, t=7s
-	FSM[6]=(state ){.NV= 0u, .NA=0u, .NR=1u, .NVuelta=0u, .SV= 0u, .SA= 0u, .SR = 1u, .SVuelta=0u, .EV = 1u, .EA = 0u, .ER = 0u, .EVuelta=0u, .OV = 1u, .OA = 0u, .OR = 0u, .OVuelta=0u, .TIMER_MOD=2024u};		//Estado Rojo (NS-SN) / Verde Sin Vuelta (EO-OE), t=7s
+	FSM[5]=(state ){.NV= 0u, .NA=0u, .NR=1u, .NVuelta=0u, .SV= 0u, .SA= 0u, .SR = 1u, .SVuelta=0u, .EV = 1u, .EA = 0u, .ER = 0u, .EVuelta=0u, .OV = 1u, .OA = 0u, .OR = 0u, .OVuelta=0u, .TIMER_MOD=1792u};		// Estado Rojo (NS-SN)/ Verde (EO-OE) Sensado, t=7s
+	FSM[6]=(state ){.NV= 0u, .NA=0u, .NR=1u, .NVuelta=0u, .SV= 0u, .SA= 0u, .SR = 1u, .SVuelta=0u, .EV = 1u, .EA = 0u, .ER = 0u, .EVuelta=0u, .OV = 1u, .OA = 0u, .OR = 0u, .OVuelta=0u, .TIMER_MOD=1792u};		//Estado Rojo (NS-SN) / Verde Sin Vuelta (EO-OE), t=7s
 	FSM[7]=(state ){.NV= 0u, .NA= 0u, .NR=1u, .NVuelta=0u, .SV= 0u, .SA = 0u, .SR = 1u, .SVuelta=0u, .EV = 0u, .EA = 0u, .ER = 0u, .EVuelta=0u, .OV = 0u, .OA = 0u, .OR = 0u, .OVuelta=0u};						//Estado Rojo (NS-SN) / Parpadeo Verde (EO-OE), t=1s
 	FSM[8]=(state ){.NV= 0u, .NA= 0u, .NR=1u, .NVuelta=0u, .SV= 0u, .SA= 0u, .SR = 1u, .SVuelta=0u, .EV = 0u, .EA = 1u, .ER = 0u, .EVuelta=0u, .OV = 0u, .OA = 1u, .OR = 0u, .OVuelta=0u, .TIMER_MOD=512u};		//Estado ROJO (NS-SN) / Amarillo (EO-OE), t=2s
 	FSM[9]=(state ){.NV= 1u, .NA=0u, .NR=0u, .NVuelta=0u, .SV= 0u, .SA= 0u, .SR = 0u, .SVuelta=0u, .EV = 0u, .EA = 0u, .ER = 1u, .EVuelta=0u, .OV = 0u, .OA = 0u, .OR = 1u, .OVuelta=0u};						//Estado Verde NS / Verde Parpadeo SN / Rojo (EO-OE), t=1s
@@ -132,7 +132,7 @@ int main(void) {
 		GPIO_WritePinOutput(GPIOC, EsteVuelta, FSM[estado].EVuelta);
 		GPIO_WritePinOutput(GPIOA, OesteVerde, FSM[estado].OV);
 		GPIO_WritePinOutput(GPIOA, OesteAmarillo, FSM[estado].OA);
-		GPIO_WritePinOutput(GPIOD, OesteRojo, FSM[estado].ORojo);
+		GPIO_WritePinOutput(GPIOD, OesteRojo, FSM[estado].OR);
 		GPIO_WritePinOutput(GPIOC, OesteVuelta, FSM[estado].OVuelta);
 
     	NSensor=GPIO_ReadPinInput(GPIOC, NorteBoton);
@@ -798,8 +798,6 @@ int main(void) {
     	break;
 
 
-
-		/*P A R A        E S e n s o r  ==  1  & &   W S e n s o r ==  1 */
 
 
     	case 31:											//Estado Azul (EO-OE), Rojo (NS-SN-EO-OE), t=4s
