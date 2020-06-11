@@ -64,7 +64,6 @@ BOARD_InitPins:
   - {pin_num: '44', peripheral: GPIOB, signal: 'GPIO, 1', pin_signal: ADC0_SE9/TSI0_CH6/PTB1/I2C0_SDA/TPM1_CH1, direction: OUTPUT}
   - {pin_num: '45', peripheral: GPIOB, signal: 'GPIO, 2', pin_signal: ADC0_SE12/TSI0_CH7/PTB2/I2C0_SCL/TPM2_CH0, direction: OUTPUT}
   - {pin_num: '46', peripheral: GPIOB, signal: 'GPIO, 3', pin_signal: ADC0_SE13/TSI0_CH8/PTB3/I2C0_SDA/TPM2_CH1, direction: OUTPUT}
-  - {pin_num: '47', peripheral: GPIOB, signal: 'GPIO, 8', pin_signal: PTB8/EXTRG_IN}
   - {pin_num: '13', peripheral: GPIOE, signal: 'GPIO, 20', pin_signal: ADC0_DP0/ADC0_SE0/PTE20/TPM1_CH0/UART0_TX, direction: OUTPUT}
   - {pin_num: '14', peripheral: GPIOE, signal: 'GPIO, 21', pin_signal: ADC0_DM0/ADC0_SE4a/PTE21/TPM1_CH1/UART0_RX, direction: OUTPUT}
   - {pin_num: '15', peripheral: GPIOE, signal: 'GPIO, 22', pin_signal: ADC0_DP3/ADC0_SE3/PTE22/TPM2_CH0/UART2_TX, direction: OUTPUT}
@@ -75,12 +74,12 @@ BOARD_InitPins:
   - {pin_num: '61', peripheral: GPIOC, signal: 'GPIO, 4', pin_signal: PTC4/LLWU_P8/SPI0_PCS0/UART1_TX/TPM0_CH3, direction: OUTPUT}
   - {pin_num: '58', peripheral: GPIOC, signal: 'GPIO, 3', pin_signal: PTC3/LLWU_P7/UART1_RX/TPM0_CH2/CLKOUTa, direction: OUTPUT}
   - {pin_num: '64', peripheral: GPIOC, signal: 'GPIO, 7', pin_signal: CMP0_IN1/PTC7/SPI0_MISO/SPI0_MOSI, direction: INPUT, pull_enable: enable}
-  - {pin_num: '30', peripheral: GPIOA, signal: 'GPIO, 4', pin_signal: TSI0_CH5/PTA4/I2C1_SDA/TPM0_CH1/NMI_b, direction: OUTPUT}
+  - {pin_num: '30', peripheral: GPIOA, signal: 'GPIO, 4', pin_signal: TSI0_CH5/PTA4/I2C1_SDA/TPM0_CH1/NMI_b, direction: OUTPUT, pull_enable: disable}
   - {pin_num: '32', peripheral: GPIOA, signal: 'GPIO, 12', pin_signal: PTA12/TPM1_CH0, direction: OUTPUT}
-  - {pin_num: '3', peripheral: GPIOE, signal: 'GPIO, 2', pin_signal: PTE2/SPI1_SCK}
   - {pin_num: '27', peripheral: GPIOA, signal: 'GPIO, 1', pin_signal: TSI0_CH2/PTA1/UART0_RX/TPM2_CH0, identifier: OesteBoton, direction: INPUT, pull_enable: enable}
   - {pin_num: '28', peripheral: GPIOA, signal: 'GPIO, 2', pin_signal: TSI0_CH3/PTA2/UART0_TX/TPM2_CH1, identifier: OesteVuelta, direction: OUTPUT}
   - {pin_num: '77', peripheral: GPIOD, signal: 'GPIO, 4', pin_signal: PTD4/LLWU_P14/SPI1_PCS0/UART2_RX/TPM0_CH4, direction: OUTPUT}
+  - {pin_num: '57', peripheral: GPIOC, signal: 'GPIO, 2', pin_signal: ADC0_SE11/TSI0_CH15/PTC2/I2C1_SDA/TPM0_CH1, direction: INPUT, pull_enable: enable}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -166,6 +165,13 @@ void BOARD_InitPins(void)
     };
     /* Initialize GPIO functionality on pin PTC0 (pin 55)  */
     GPIO_PinInit(BOARD_INITPINS_EsteVuelta_GPIO, BOARD_INITPINS_EsteVuelta_PIN, &EsteVuelta_config);
+
+    gpio_pin_config_t NorteBoton_config = {
+        .pinDirection = kGPIO_DigitalInput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PTC2 (pin 57)  */
+    GPIO_PinInit(BOARD_INITPINS_NorteBoton_GPIO, BOARD_INITPINS_NorteBoton_PIN, &NorteBoton_config);
 
     gpio_pin_config_t EsteRojo_config = {
         .pinDirection = kGPIO_DigitalOutput,
@@ -259,6 +265,13 @@ void BOARD_InitPins(void)
     /* PORTA4 (pin 30) is configured as PTA4 */
     PORT_SetPinMux(BOARD_INITPINS_OesteVerde_PORT, BOARD_INITPINS_OesteVerde_PIN, kPORT_MuxAsGpio);
 
+    PORTA->PCR[4] = ((PORTA->PCR[4] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable));
+
     /* PORTB0 (pin 43) is configured as PTB0 */
     PORT_SetPinMux(BOARD_INITPINS_NorteVerde_PORT, BOARD_INITPINS_NorteVerde_PIN, kPORT_MuxAsGpio);
 
@@ -271,11 +284,21 @@ void BOARD_InitPins(void)
     /* PORTB3 (pin 46) is configured as PTB3 */
     PORT_SetPinMux(BOARD_INITPINS_NorteVuelta_PORT, BOARD_INITPINS_NorteVuelta_PIN, kPORT_MuxAsGpio);
 
-    /* PORTB8 (pin 47) is configured as PTB8 */
-    PORT_SetPinMux(PORTB, 8U, kPORT_MuxAsGpio);
-
     /* PORTC0 (pin 55) is configured as PTC0 */
     PORT_SetPinMux(BOARD_INITPINS_EsteVuelta_PORT, BOARD_INITPINS_EsteVuelta_PIN, kPORT_MuxAsGpio);
+
+    const port_pin_config_t NorteBoton = {/* Internal pull-up resistor is enabled */
+                                          kPORT_PullUp,
+                                          /* Slow slew rate is configured */
+                                          kPORT_SlowSlewRate,
+                                          /* Passive filter is disabled */
+                                          kPORT_PassiveFilterDisable,
+                                          /* Low drive strength is configured */
+                                          kPORT_LowDriveStrength,
+                                          /* Pin is configured as PTC2 */
+                                          kPORT_MuxAsGpio};
+    /* PORTC2 (pin 57) is configured as PTC2 */
+    PORT_SetPinConfig(BOARD_INITPINS_NorteBoton_PORT, BOARD_INITPINS_NorteBoton_PIN, &NorteBoton);
 
     /* PORTC3 (pin 58) is configured as PTC3 */
     PORT_SetPinMux(BOARD_INITPINS_EsteRojo_PORT, BOARD_INITPINS_EsteRojo_PIN, kPORT_MuxAsGpio);
@@ -301,9 +324,6 @@ void BOARD_InitPins(void)
 
     /* PORTD4 (pin 77) is configured as PTD4 */
     PORT_SetPinMux(BOARD_INITPINS_OesteRojo_PORT, BOARD_INITPINS_OesteRojo_PIN, kPORT_MuxAsGpio);
-
-    /* PORTE2 (pin 3) is configured as PTE2 */
-    PORT_SetPinMux(PORTE, 2U, kPORT_MuxAsGpio);
 
     /* PORTE20 (pin 13) is configured as PTE20 */
     PORT_SetPinMux(BOARD_INITPINS_SurVerde_PORT, BOARD_INITPINS_SurVerde_PIN, kPORT_MuxAsGpio);

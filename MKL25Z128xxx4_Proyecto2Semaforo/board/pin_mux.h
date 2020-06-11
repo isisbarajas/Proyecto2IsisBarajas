@@ -177,6 +177,14 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_OesteRojo_PIN 4U     /*!<@brief PORTD pin index: 4 */
                                             /* @} */
 
+/*! @name PORTC2 (number 57), J10[10]/A4
+  @{ */
+#define BOARD_INITPINS_NorteBoton_FGPIO FGPIOC /*!<@brief FGPIO device name: FGPIOC */
+#define BOARD_INITPINS_NorteBoton_GPIO GPIOC /*!<@brief GPIO device name: GPIOC */
+#define BOARD_INITPINS_NorteBoton_PORT PORTC /*!<@brief PORT device name: PORTC */
+#define BOARD_INITPINS_NorteBoton_PIN 2U     /*!<@brief PORTC pin index: 2 */
+                                             /* @} */
+
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *
