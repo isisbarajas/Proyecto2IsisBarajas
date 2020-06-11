@@ -62,24 +62,6 @@ int main(void) {
 	TPM_Init(TPM1, &config);
 	TPM_Init(TPM2, &config);
 
-	uint8_t estado_reg=0;
-	uint8_t estado=0;
-	uint8_t Timer_init=0;
-	uint32_t timerBandera;
-	uint32_t mascara=1u<<8u;
-	uint32_t mascara2=1u<<8u;
-	uint32_t mascara_Off2= mascara2;
-	uint32_t mascara_Off= mascara;
-	uint8_t NSensor;
-	uint8_t SSensor;
-	uint8_t ESensor;
-	uint8_t OSensor;
-	uint8_t NSensor_reg=1;
-	uint8_t SSensor_reg=1;
-	uint8_t ESensor_reg=1;
-	uint8_t OSensor_reg=1;
-	uint8_t estadoactual=0;
-	int contador = 0;
 
 	state FSM[34];
 	FSM[0]=(state){.NV= 0u, .NA=1u, .NR=0u, .NVuelta=0u, .SV = 0u, .SA = 1u, .SR = 0u, .SVuelta=0u, .EV = 0u, .EA = 1u, .ER = 0u, .EVuelta=0u, .OV = 0u, .OA = 1u, .OR = 0u, .OVuelta=0u, .TIMER_MOD=2560u};	//Parpadeo Amarillo
@@ -115,6 +97,25 @@ int main(void) {
 	FSM[30]=(state ){.NV= 0u, .NA=0u, .NR=0u, .NVuelta=0u, .SV= 0u, .SA= 0u, .SR = 0u, .SVuelta=0u, .EV = 0u, .EA = 0u, .ER = 1u, .EVuelta=0u, .OV = 0u, .OA = 0u, .OR = 1u, .OVuelta=0u};						//Vuelta NS-SN y  Rojo EO-OE
 	FSM[31]=(state ){.NV= 0u, .NA=0u, .NR=1u, .NVuelta=0u, .SV= 0u, .SA= 0u, .SR = 1u, .SVuelta=0u, .EV = 0u, .EA = 0u, .ER = 0u, .EVuelta=1u, .OV = 0u, .OA = 0u, .OR = 0u, .OVuelta=1u, .TIMER_MOD=1024u};		//Vuelta EO-OE y Rojo NS-SN 4s
 	FSM[32]=(state ){.NV= 0u, .NA=0u, .NR=1u, .NVuelta=0u, .SV= 0u, .SA= 0u, .SR = 1u, .SVuelta=0u, .EV = 0u, .EA= 0u, .ER = 0u, .EVuelta=0u, .OV = 0u, .OA = 0u, .OR = 0u, .OVuelta=0u};						//Parpadeo Vuelta EO-OE y Rojo NS-SN
+
+	uint8_t estado_reg=0;
+	uint8_t estado=0;
+	uint8_t Timer_init=0;
+	uint32_t timerBandera;
+	uint32_t mascara=1u<<8u;
+	uint32_t mascara2=1u<<8u;
+	uint32_t mascara_Off2= mascara2;
+	uint32_t mascara_Off= mascara;
+	uint8_t NSensor;
+	uint8_t SSensor;
+	uint8_t ESensor;
+	uint8_t OSensor;
+	uint8_t NSensor_reg=1;
+	uint8_t SSensor_reg=1;
+	uint8_t ESensor_reg=1;
+	uint8_t OSensor_reg=1;
+	uint8_t estadoactual=0;
+	int contador = 0;
 
     while(1) {
     	GPIO_WritePinOutput(GPIOB, NorteVerde, FSM[estado].NV);
